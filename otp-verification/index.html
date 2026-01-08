@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time OTP Verification</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Email/Phone Input Step -->
+        <div class="otp-card" id="emailStep">
+            <h2 class="title">Secure Verification</h2>
+            <p class="subtitle">Enter your email or phone number to receive a verification code</p>
+            
+            <div class="input-group">
+                <input type="text" id="emailPhone" class="email-input" placeholder="Email or Phone Number" autocomplete="email">
+                <div class="input-error" id="inputError"></div>
+            </div>
+            
+            <button class="verify-btn" id="sendOtpBtn">
+                <span class="btn-text">Send OTP</span>
+                <div class="spinner"></div>
+            </button>
+        </div>
+        
+        <!-- OTP Verification Step -->
+        <div class="otp-card" id="otpStep" style="display: none;">
+            <h2 class="title">Enter Verification Code</h2>
+            <p class="subtitle">We've sent a 6-digit code to <span id="sentTo"></span></p>
+            
+            <div class="otp-input-container">
+                <input type="text" maxlength="1" class="otp-input" data-index="0" autofocus>
+                <input type="text" maxlength="1" class="otp-input" data-index="1">
+                <input type="text" maxlength="1" class="otp-input" data-index="2">
+                <input type="text" maxlength="1" class="otp-input" data-index="3">
+                <input type="text" maxlength="1" class="otp-input" data-index="4">
+                <input type="text" maxlength="1" class="otp-input" data-index="5">
+            </div>
+            
+            <button class="verify-btn" id="verifyBtn">
+                <span class="btn-text">Verify OTP</span>
+                <div class="spinner"></div>
+            </button>
+            
+            <div class="message success-message" id="successMessage">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                </svg>
+                <span>Verification successful!</span>
+            </div>
+            
+            <div class="message error-message" id="errorMessage">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <span>Invalid OTP. Please try again.</span>
+            </div>
+            
+            <div class="resend-container">
+                <span class="resend-text">Didn't receive the code?</span>
+                <button class="resend-btn" id="resendBtn">Resend OTP</button>
+                <div class="timer" id="timer"></div>
+            </div>
+            
+            <button class="back-btn" id="backBtn">← Change Email/Phone</button>
+        </div>
+        
+        <!-- OTP Display Notification -->
+        <div class="otp-notification" id="otpNotification">
+            <button class="close-notification" id="closeNotification">&times;</button>
+            <div class="notification-content">
+                <h3>Your OTP Code</h3>
+                <div class="otp-display" id="otpDisplay"></div>
+                <p class="notification-hint">This code will expire in 5 minutes</p>
+                <button class="copy-btn" id="copyOtp">Copy Code</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
