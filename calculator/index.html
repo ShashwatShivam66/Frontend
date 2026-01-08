@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Tip Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    :root {
+      --bg-light: #f5f7fa;
+      --card-bg-light: rgba(255, 255, 255, 0.7);
+      --text-primary-light: #333333;
+      --text-secondary-light: #666666;
+      --accent-light: #3a7bd5;
+      --border-light: rgba(255, 255, 255, 0.5);
+      --input-bg-light: rgba(255, 255, 255, 0.5);
+      --result-bg-light: rgba(240, 245, 255, 0.7);
+      --bg-dark: #1a1a2e;
+      --card-bg-dark: rgba(36, 36, 68, 0.7);
+      --text-primary-dark: #ffffff;
+      --text-secondary-dark: #cccccc;
+      --accent-dark: #00d2ff;
+      --border-dark: rgba(255, 255, 255, 0.1);
+      --input-bg-dark: rgba(42, 42, 74, 0.5);
+      --result-bg-dark: rgba(42, 42, 74, 0.7);
+    }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+      transition: background-color 0.5s ease;
+    }
+    
+    body.light-theme {
+      background-color: var(--bg-light);
+      color: var(--text-primary-light);
+      background-image: linear-gradient(120deg, #f0f2f5 0%, #e6eef7 100%);
+    }
+    
+    body.dark-theme {
+      background-color: var(--bg-dark);
+      color: var(--text-primary-dark);
+      background-image: linear-gradient(120deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    
+    .dark-theme .stars {
+      opacity: 1;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle 5s infinite;
+    }
+    
+    @keyframes twinkle {
+      0% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    
+    .container {
+      max-width: 500px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .light-theme .container {
+      background: var(--card-bg-light);
+      color: var(--text-primary-light);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    .dark-theme .container {
+      background: var(--card-bg-dark);
+      color: var(--text-primary-dark);
+      border: 1px solid var(--border-dark);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header h1 {
+      font-family: 'Roboto', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      animation: slideInLeft 0.8s ease-out;
+    }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .light-theme .header h1 {
+      color: var(--text-primary-light);
+    }
+    
+    .dark-theme .header h1 {
+      color: var(--text-primary-dark);
+    }
+    
+    .theme-toggle {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      animation: slideInRight 0.8s ease-out;
+    }
+    
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .theme-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e0e0e0;
+      border-radius: 34px;
+      transition: 0.4s;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark-theme .toggle-slider {
+      background-color: #555;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    .light-theme .toggle-slider:before {
+      content: "☀️";
+      font-size: 14px;
+      text-align: center;
+      line-height: 22px;
+    }
+    
+    .dark-theme .toggle-slider:before {
+      content: "🌙";
+      font-size: 14px;
+      text-align: center;
+      line-height: 22px;
+      transform: translateX(30px);
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+      z-index: 1;
+      animation: fadeInUp 0.8s ease-out;
+      animation-delay: 0.1s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 16px 20px;
+      padding-left: 50px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .light-theme .input-field {
+      background: var(--input-bg-light);
+      border: 1px solid var(--border-light);
+      color: var(--text-primary-light);
+    }
+    
+    .dark-theme .input-field {
+      background: var(--input-bg-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-primary-dark);
+    }
+    
+    .input-field:focus {
+      outline: none;
+    }
+    
+    .light-theme .input-field:focus {
+      border-color: var(--accent-light);
+      box-shadow: 0 0 0 2px rgba(58, 123, 213, 0.2);
+    }
+    
+    .dark-theme .input-field:focus {
+      border-color: var(--accent-dark);
+      box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
+    }
+    
+    .input-label {
+      position: absolute;
+      left: 50px;
+      top: 16px;
+      font-size: 16px;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    
+    .light-theme .input-label {
+      color: var(--text-secondary-light);
+    }
+    
+    .dark-theme .input-label {
+      color: var(--text-secondary-dark);
+    }
+    
+    .input-field:focus ~ .input-label,
+    .input-field:not(:placeholder-shown) ~ .input-label {
+      top: -10px;
+      left: 15px;
+      font-size: 12px;
+      padding: 0 5px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    
+    .light-theme .input-field:focus ~ .input-label,
+    .light-theme .input-field:not(:placeholder-shown) ~ .input-label {
+      background: var(--card-bg-light);
+      color: var(--accent-light);
+    }
+    
+    .dark-theme .input-field:focus ~ .input-label,
+    .dark-theme .input-field:not(:placeholder-shown) ~ .input-label {
+      background: var(--card-bg-dark);
+      color: var(--accent-dark);
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    .light-theme .input-icon {
+      color: var(--text-secondary-light);
+    }
+    
+    .dark-theme .input-icon {
+      color: var(--text-secondary-dark);
+    }
+    
+    .tip-percentage {
+      margin-top: 30px;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.8s ease-out;
+      animation-delay: 0.2s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+    
+    .tip-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    
+    .tip-value {
+      font-weight: 600;
+      font-size: 16px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .light-theme .tip-value {
+      background: var(--accent-light);
+      color: white;
+    }
+    
+    .dark-theme .tip-value {
+      background: var(--accent-dark);
+      color: #1a1a2e;
+    }
+    
+    .slider-container {
+      position: relative;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+    }
+    
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    .light-theme .slider {
+      background: #e0e0e0;
+    }
+    
+    .dark-theme .slider {
+      background: #444466;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .light-theme .slider::-webkit-slider-thumb {
+      background: var(--accent-light);
+      box-shadow: 0 0 5px rgba(58, 123, 213, 0.4);
+    }
+    
+    .dark-theme .slider::-webkit-slider-thumb {
+      background: var(--accent-dark);
+      box-shadow: 0 0 5px rgba(0, 210, 255, 0.4);
+    }
+    
+    .slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+    
+    .slider::-webkit-slider-thumb:active {
+      transform: scale(0.95);
+    }
+    
+    .slider::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+    
+    .light-theme .slider::-moz-range-thumb {
+      background: var(--accent-light);
+      box-shadow: 0 0 5px rgba(58, 123, 213, 0.4);
+    }
+    
+    .dark-theme .slider::-moz-range-thumb {
+      background: var(--accent-dark);
+      box-shadow: 0 0 5px rgba(0, 210, 255, 0.4);
+    }
+    
+    .slider-track {
+      position: absolute;
+      height: 6px;
+      border-radius: 3px;
+      pointer-events: none;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+    
+    .calculate-btn {
+      width: 100%;
+      padding: 16px;
+      margin-top: 30px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      letter-spacing: 0.5px;
+      animation: fadeInUp 0.8s ease-out;
+      animation-delay: 0.3s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+    
+    .light-theme .calculate-btn {
+      background: var(--accent-light);
+      box-shadow: 0 4px 10px rgba(58, 123, 213, 0.2);
+    }
+    
+    .dark-theme .calculate-btn {
+      background: var(--accent-dark);
+      box-shadow: 0 4px 10px rgba(0, 210, 255, 0.2);
+    }
+    
+    .light-theme .calculate-btn:hover {
+      background: #2a6ac5;
+      box-shadow: 0 6px 15px rgba(58, 123, 213, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .dark-theme .calculate-btn:hover {
+      background: #00bfe6;
+      box-shadow: 0 6px 15px rgba(0, 210, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .calculate-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .calculate-btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+    }
+    
+    @keyframes ripple {
+      to {
+        transform: scale(2.5);
+        opacity: 0;
+      }
+    }
+    
+    .results {
+      margin-top: 30px;
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      animation: fadeInUp 0.8s ease-out;
+      animation-delay: 0.4s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+    
+    .light-theme .results {
+      background: var(--result-bg-light);
+      border: 1px solid rgba(208, 225, 255, 0.7);
+    }
+    
+    .dark-theme .results {
+      background: var(--result-bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 16px;
+      align-items: center;
+    }
+    
+    .result-row:last-child {
+      margin-bottom: 0;
+      padding-top: 15px;
+    }
+    
+    .light-theme .result-row:last-child {
+      border-top: 1px solid rgba(208, 225, 255, 0.7);
+    }
+    
+    .dark-theme .result-row:last-child {
+      border-top: 1px solid var(--border-dark);
+    }
+    
+    .result-label {
+      font-weight: 500;
+    }
+    
+    .light-theme .result-label {
+      color: var(--text-primary-light);
+    }
+    
+    .dark-theme .result-label {
+      color: var(--text-primary-dark);
+    }
+    
+    .result-value {
+      font-weight: 700;
+      min-width: 100px;
+      text-align: right;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .light-theme .result-value {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--accent-light);
+      border: 1px solid rgba(208, 225, 255, 0.7);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark-theme .result-value {
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--accent-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .advanced-toggle {
+      margin-top: 25px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.8s ease-out;
+      animation-delay: 0.5s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+    
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin: 0 auto;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+    }
+    
+    .light-theme .toggle-btn {
+      color: var(--accent-light);
+    }
+    
+    .dark-theme .toggle-btn {
+      color: var(--accent-dark);
+    }
+    
+    .toggle-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .light-theme .toggle-btn:hover {
+      background: rgba(58, 123, 213, 0.1);
+    }
+    
+    .dark-theme .toggle-btn:hover {
+      background: rgba(0, 210, 255, 0.1);
+    }
+    
+    .toggle-icon {
+      margin-left: 8px;
+      transition: transform 0.3s ease;
+    }
+    
+    .advanced-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      margin-top: 10px;
+    }
+    
+    .advanced-section.active {
+      max-height: 200px;
+    }
+    
+    .people-counter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 15px;
+      border-radius: 8px;
+      padding: 15px;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .light-theme .people-counter {
+      background: var(--input-bg-light);
+      border: 1px solid var(--border-light);
+    }
+    
+    .dark-theme .people-counter {
+      background: var(--input-bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .counter-label {
+      font-weight: 500;
+    }
+    
+    .light-theme .counter-label {
+      color: var(--text-primary-light);
+    }
+    
+    .dark-theme .counter-label {
+      color: var(--text-primary-dark);
+    }
+    
+    .counter-controls {
+      display: flex;
+      align-items: center;
+    }
+    
+    .counter-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .light-theme .counter-btn {
+      background: var(--accent-light);
+      color: white;
+    }
+    
+    .dark-theme .counter-btn {
+      background: var(--accent-dark);
+      color: #1a1a2e;
+    }
+    
+    .counter-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .light-theme .counter-btn:hover {
+      background: #2a6ac5;
+    }
+    
+    .dark-theme .counter-btn:hover {
+      background: #00bfe6;
+    }
+    
+    .counter-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .counter-value {
+      margin: 0 15px;
+      font-weight: 600;
+      min-width: 20px;
+      text-align: center;
+    }
+    
+    .light-theme .counter-value {
+      color: var(--text-primary-light);
+    }
+    
+    .dark-theme .counter-value {
+      color: var(--text-primary-dark);
+    }
+    
+    .each-pays {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      padding: 15px;
+      border-radius: 8px;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .light-theme .each-pays {
+      background: var(--result-bg-light);
+      border: 1px solid rgba(208, 225, 255, 0.7);
+    }
+    
+    .dark-theme .each-pays {
+      background: var(--result-bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .each-pays-label {
+      font-weight: 500;
+    }
+    
+    .light-theme .each-pays-label {
+      color: var(--text-primary-light);
+    }
+    
+    .dark-theme .each-pays-label {
+      color: var(--text-primary-dark);
+    }
+    
+    .each-pays-value {
+      font-weight: 700;
+      padding: 8px 15px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .light-theme .each-pays-value {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--accent-light);
+      border: 1px solid rgba(208, 225, 255, 0.7);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark-theme .each-pays-value {
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--accent-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 24px;
+      }
+      
+      .input-field {
+        padding: 14px 14px 14px 45px;
+        font-size: 16px;
+      }
+      
+      .input-label {
+        left: 45px;
+        top: 14px;
+      }
+      
+      .input-icon {
+        left: 15px;
+      }
+      
+      .calculate-btn {
+        padding: 14px;
+      }
+      
+      .result-row {
+        font-size: 15px;
+      }
+      
+      .result-value {
+        font-size: 16px;
+        min-width: 80px;
+      }
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <div class="stars" id="stars"></div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>Tip Calculator</h1>
+      <label class="theme-toggle">
+        <input type="checkbox" id="theme-toggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    
+    <div class="input-group">
+      <span class="input-icon">₹</span>
+      <input type="text" class="input-field" id="bill-amount" placeholder=" " autocomplete="off">
+      <label class="input-label">Bill Amount</label>
+    </div>
+    
+    <div class="tip-percentage">
+      <div class="tip-label">
+        <span>Tip Percentage</span>
+        <span class="tip-value" id="tip-percentage-value">15%</span>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="slider-track"></div>
+        <input type="range" min="0" max="50" value="15" class="slider" id="tip-slider">
+      </div>
+    </div>
+    
+    <button class="calculate-btn" id="calculate-btn">Calculate Tip</button>
+    
+    <div class="results">
+      <div class="result-row">
+        <span class="result-label">Tip Amount:</span>
+        <span class="result-value" id="tip-amount">₹0.00</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Total:</span>
+        <span class="result-value" id="total-amount">₹0.00</span>
+      </div>
+    </div>
+    
+    <div class="advanced-toggle">
+      <button class="toggle-btn" id="toggle-advanced">
+        Advanced Options
+        <span class="toggle-icon">▼</span>
+      </button>
+      
+      <div class="advanced-section" id="advanced-section">
+        <div class="people-counter">
+          <span class="counter-label">People</span>
+          <div class="counter-controls">
+            <button class="counter-btn" id="decrease-people">-</button>
+            <span class="counter-value" id="people-count">1</span>
+            <button class="counter-btn" id="increase-people">+</button>
+          </div>
+        </div>
+        
+        <div class="each-pays">
+          <span class="each-pays-label">Each pays:</span>
+          <span class="each-pays-value" id="each-pays">₹0.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const billInput = document.getElementById('bill-amount');
+    const tipSlider = document.getElementById('tip-slider');
+    const tipValue = document.getElementById('tip-percentage-value');
+    const sliderTrack = document.getElementById('slider-track');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const tipAmount = document.getElementById('tip-amount');
+    const totalAmount = document.getElementById('total-amount');
+    const toggleAdvanced = document.getElementById('toggle-advanced');
+    const advancedSection = document.getElementById('advanced-section');
+    const toggleIcon = document.querySelector('.toggle-icon');
+    const decreasePeople = document.getElementById('decrease-people');
+    const increasePeople = document.getElementById('increase-people');
+    const peopleCount = document.getElementById('people-count');
+    const eachPays = document.getElementById('each-pays');
+    const starsContainer = document.getElementById('stars');
+    
+    function createStars() {
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.animationDelay = `${Math.random() * 5}s`;
+        starsContainer.appendChild(star);
+      }
+    }
+    
+    createStars();
+    
+    let bill = 0;
+    let tipPercentage = 15;
+    let people = 1;
+    
+    function updateSliderTrack() {
+      const percentage = (tipPercentage / 50) * 100;
+      sliderTrack.style.width = `${percentage}%`;
+      if (body.classList.contains('light-theme')) {
+        const hue = 220;
+        const saturation = 70 + (percentage * 0.3);
+        const lightness = 55 - (percentage * 0.3);
+        tipValue.style.background = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        sliderTrack.style.background = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      } else {
+        const hue = 190 + (percentage * 0.6);
+        const saturation = 80 + (percentage * 0.2);
+        const lightness = 60 - (percentage * 0.2);
+        tipValue.style.background = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        sliderTrack.style.background = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      }
+    }
+    
+    updateSliderTrack();
+    
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      body.className = savedTheme;
+      themeToggle.checked = savedTheme === 'dark-theme';
+      updateSliderTrack();
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        body.className = 'dark-theme';
+        themeToggle.checked = true;
+        updateSliderTrack();
+      }
+    }
+    
+    themeToggle.addEventListener('change', function() {
+      if (this.checked) {
+        body.className = 'dark-theme';
+        localStorage.setItem('theme', 'dark-theme');
+      } else {
+        body.className = 'light-theme';
+        localStorage.setItem('theme', 'light-theme');
+      }
+      updateSliderTrack();
+    });
+    
+    function formatCurrency(amount) {
+      return '₹' + amount.toFixed(2);
+    }
+    
+    function calculate() {
+      if (bill > 0) {
+        const tipValue = bill * (tipPercentage / 100);
+        const total = bill + tipValue;
+        const perPerson = total / people;
+        animateValue(tipAmount, parseFloat(tipAmount.textContent.replace('₹', '')), tipValue);
+        animateValue(totalAmount, parseFloat(totalAmount.textContent.replace('₹', '')), total);
+        animateValue(eachPays, parseFloat(eachPays.textContent.replace('₹', '')), perPerson);
+      }
+    }
+    
+    function animateValue(element, start, end) {
+      let startTimestamp = null;
+      const duration = 800;
+      function step(timestamp) {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const current = start + progress * (end - start);
+        element.textContent = formatCurrency(current);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      }
+      window.requestAnimationFrame(step);
+    }
+    
+    billInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^\d.]/g, '');
+      const decimalPoints = this.value.match(/\./g);
+      if (decimalPoints && decimalPoints.length > 1) {
+        this.value = this.value.slice(0, this.value.lastIndexOf('.'));
+      }
+      bill = parseFloat(this.value) || 0;
+    });
+    
+    tipSlider.addEventListener('input', function() {
+      tipPercentage = parseInt(this.value);
+      tipValue.textContent = tipPercentage + '%';
+      updateSliderTrack();
+    });
+    
+    calculateBtn.addEventListener('click', function(e) {
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      this.appendChild(ripple);
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+      calculate();
+      const container = document.querySelector('.container');
+      container.style.transform = 'scale(1.01)';
+      setTimeout(() => {
+        container.style.transform = 'scale(1)';
+      }, 200);
+    });
+    
+    toggleAdvanced.addEventListener('click', function() {
+      advancedSection.classList.toggle('active');
+      toggleIcon.style.transform = advancedSection.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0)';
+    });
+    
+    decreasePeople.addEventListener('click', function() {
+      if (people > 1) {
+        people--;
+        peopleCount.textContent = people;
+        calculate();
+      }
+    });
+    
+    increasePeople.addEventListener('click', function() {
+      people++;
+      peopleCount.textContent = people;
+      calculate();
+    });
+    
+    billInput.addEventListener('blur', function() {
+      if (this.value) {
+        this.value = parseFloat(this.value).toFixed(2);
+      }
+    });
+    
+    billInput.addEventListener('keyup', function(e) {
+      if (e.key === 'Enter') {
+        if (this.value) {
+          this.value = parseFloat(this.value).toFixed(2);
+        }
+        calculate();
+      }
+    });
+    
+    sliderTrack.style.width = `${(tipPercentage / 50) * 100}%`;
+  </script>
+  </body>
+</html>
