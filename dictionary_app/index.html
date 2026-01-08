@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Web App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="light font-inter min-h-screen transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <h1 class="text-2xl font-bold">Dictionary</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <select id="fontSelector" class="appearance-none bg-transparent border-b border-gray-400 py-1 pr-8 focus:outline-none focus:border-blue-500 dark:border-gray-500">
+                        <option value="inter">Inter</option>
+                        <option value="lora">Lora</option>
+                        <option value="merriweather">Merriweather</option>
+                        <option value="montserrat">Montserrat</option>
+                        <option value="opensans">Open Sans</option>
+                        <option value="playfair">Playfair Display</option>
+                        <option value="poppins">Poppins</option>
+                        <option value="roboto">Roboto</option>
+                        <option value="robotomono">Roboto Mono</option>
+                        <option value="sourcesans">Source Sans Pro</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <span class="mr-2 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </span>
+                    <label class="switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="ml-2 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="search-container mb-8">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search for any word..." 
+                    class="w-full py-3 px-4 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                >
+                <button id="searchButton" class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div id="loader" class="hidden flex justify-center my-12">
+            <div class="loader w-12 h-12 border-4 border-gray-300 rounded-full"></div>
+        </div>
+        
+        <div id="errorContainer" class="hidden text-center my-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-xl font-bold mb-2">No Definitions Found</h3>
+            <p id="errorMessage" class="text-gray-600 dark:text-gray-400">Sorry, we couldn't find definitions for the word you were looking for.</p>
+        </div>
+        
+        <div id="resultContainer" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 id="wordTitle" class="text-4xl font-bold mb-1"></h2>
+                    <p id="phonetic" class="text-blue-500 text-lg"></p>
+                </div>
+                <button id="playButton" class="w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition-colors duration-200 dark:bg-blue-900 dark:hover:bg-blue-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 dark:text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="definitionsContainer"></div>
+            
+            <div class="mt-8 mb-4">
+                <div class="flex items-center mb-4">
+                    <h3 class="text-lg font-semibold mr-2">Word Relations</h3>
+                    <div class="flex-grow h-px bg-gray-300 dark:bg-gray-700"></div>
+                </div>
+                
+                <div class="flex space-x-4 mb-6">
+                    <button id="synonymsTab" class="py-2 px-4 rounded-lg bg-blue-500 text-white font-medium">Synonyms</button>
+                    <button id="antonymsTab" class="py-2 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium">Antonyms</button>
+                </div>
+                
+                <div id="synonymsContainer" class="flex flex-wrap gap-2"></div>
+                <div id="antonymsContainer" class="flex flex-wrap gap-2 hidden"></div>
+            </div>
+            
+            <div class="mt-8 text-sm text-gray-500 dark:text-gray-400">
+                <p>Source: <a id="sourceLink" href="#" target="_blank" class="underline hover:text-blue-500"></a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
