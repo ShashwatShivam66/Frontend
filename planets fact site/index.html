@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE PLANETS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&family=Spartan:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loading-planet"></div>
+        <p class="loading-text">Exploring the cosmos...</p>
+    </div>
+    
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <div class="nebula"></div>
+    
+    <header>
+        <div class="logo">THE PLANETS</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" data-planet="mercury">MERCURY</a></li>
+                <li><a href="#" data-planet="venus">VENUS</a></li>
+                <li><a href="#" data-planet="earth" class="active">EARTH</a></li>
+                <li><a href="#" data-planet="mars">MARS</a></li>
+                <li><a href="#" data-planet="jupiter">JUPITER</a></li>
+                <li><a href="#" data-planet="saturn">SATURN</a></li>
+                <li><a href="#" data-planet="uranus">URANUS</a></li>
+                <li><a href="#" data-planet="neptune">NEPTUNE</a></li>
+            </ul>
+        </nav>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="planet-container">
+            <div class="planet-visual">
+                <div class="planet-wrapper">
+                    <div class="planet earth-planet">
+                        <div class="planet-surface"></div>
+                        <div class="planet-structure hidden"></div>
+                        <div class="geology-marker hidden"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="planet-info">
+                <h1 class="planet-name">EARTH</h1>
+                <p class="planet-description">
+                    Third planet from the Sun and the only known planet to harbor life. About 29.2% of Earth's surface is land with remaining 70.8% is covered with water. Earth's distance from the Sun, physical properties and geological history have allowed life to evolve and thrive.
+                </p>
+                <p class="source">
+                    Source : <a href="https://en.wikipedia.org/wiki/Earth" target="_blank">Wikipedia</a>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+                        <path fill="#FFF" fill-opacity=".5" d="M11.34.66C10.9.22 10.37 0 9.75 0h-7.5C1.63 0 1.1.22.66.66.22 1.1 0 1.63 0 2.25v7.5c0 .62.22 1.15.66 1.59.44.44.97.66 1.59.66h7.5c.62 0 1.15-.22 1.59-.66.44-.44.66-.97.66-1.59v-7.5c0-.62-.22-1.15-.66-1.59zM10 6.25a.467.467 0 01-.305.46.544.544 0 01-.195.04.465.465 0 01-.352-.149L8.023 5.476 3.852 9.648a.481.481 0 01-.352.149.48.48 0 01-.352-.149l-.796-.797a.48.48 0 01-.149-.351.48.48 0 01.149-.352l4.172-4.172-1.125-1.125c-.162-.15-.198-.333-.11-.546A.467.467 0 015.75 2H9.5c.135 0 .253.05.352.148A.48.48 0 0110 2.5v3.75z"/>
+                    </svg>
+                </p>
+                
+                <div class="planet-tabs">
+                    <button class="tab-button active" data-tab="overview">
+                        <span class="tab-number">01</span>
+                        OVERVIEW
+                    </button>
+                    <button class="tab-button" data-tab="structure">
+                        <span class="tab-number">02</span>
+                        INTERNAL STRUCTURE
+                    </button>
+                    <button class="tab-button" data-tab="geology">
+                        <span class="tab-number">03</span>
+                        SURFACE GEOLOGY
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="planet-stats">
+            <div class="stat-card">
+                <h3>ROTATION TIME</h3>
+                <p class="stat-value">0.99 DAYS</p>
+            </div>
+            <div class="stat-card">
+                <h3>REVOLUTION TIME</h3>
+                <p class="stat-value">365.26 DAYS</p>
+            </div>
+            <div class="stat-card">
+                <h3>RADIUS</h3>
+                <p class="stat-value">6,371 KM</p>
+            </div>
+            <div class="stat-card">
+                <h3>AVERAGE TEMP.</h3>
+                <p class="stat-value">16°C</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="planets-data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
