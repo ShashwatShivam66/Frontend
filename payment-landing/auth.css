@@ -1,0 +1,146 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+    color: #ffffff;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.auth-box {
+    background: rgba(28, 31, 46, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeInUp 0.5s ease-out both;
+}
+
+.auth-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    color: #b8b8c8;
+}
+
+.auth-box input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ffffff40;
+    border-radius: 5px;
+    background: #1a1d2e;
+    color: #ffffff;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.auth-box input:focus {
+    border-color: #4A9EFF;
+}
+
+.auth-btn, .social-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #4A9EFF;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.auth-btn:hover, .social-btn:hover {
+    background: #3A8EEF;
+    transform: translateY(-2px);
+}
+
+.auth-btn:active, .social-btn:active {
+    transform: translateY(0);
+}
+
+.divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.divider span {
+    background: #1a1d2e;
+    padding: 0 10px;
+    color: #b8b8c8;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox-container span {
+    margin-left: 5px;
+}
+
+.forgot-link {
+    color: #4A9EFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+    color: #3A8EEF;
+}
+
+.auth-switch {
+    margin-top: 30px;
+    color: #b8b8c8;
+}
+
+.auth-switch a {
+    color: #4A9EFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-switch a:hover {
+    color: #3A8EEF;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

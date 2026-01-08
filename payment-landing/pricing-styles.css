@@ -1,0 +1,128 @@
+
+.pricing-section {
+    padding: 40px 0;
+    background-color: #fcfcfc;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.pricing-card {
+    background: linear-gradient(135deg, #f8f9fa, #ecf0f3);
+    border-radius: 10px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 40px 25px;
+    transition: all 0.4s ease;
+    animation: fadeInUp 0.8s ease-in-out;
+}
+
+.popular-badge{
+    background-color: #4A9EFF;
+    color: #ffffff;
+    padding: 5px 15px;
+    font-size: 12px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+}
+
+.featured {
+    border: 3px solid #4A9EFF;
+}
+
+.plan-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.plan-price {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.plan-price span {
+    font-size: 1rem;
+    color: #777;
+}
+
+.plan-features {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.plan-features li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.plan-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #4A9EFF;
+    font-weight: bold;
+}
+
+.plan-btn {
+    background-color: #4A9EFF;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.plan-btn:hover {
+    background-color: #3A8EEF;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.4);
+}
+
+.featured-btn {
+    background-color: #ffffff;
+    color: #4A9EFF;
+    border: 2px solid #4A9EFF;
+}
+
+.featured-btn:hover {
+    background-color: #4A9EFF;
+    color: #ffffff;
+}
+
+.comparison-section {
+    padding: 40px 0;
+    background-color: #f0f4f8;
+}
+
+.comparison-table {
+    width: 100%;
+border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 30px;
+    font-size: 0.9rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+padding: 15px 20px;
+    text-align: center;
+border-bottom: 1px solid rgba(220, 220, 230, 0.6);
+}
+
+.comparison-table th {
+    background-color: #4A9EFF;
+    color: #ffffff;
+}
+
