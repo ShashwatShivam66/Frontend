@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5-Step Progress Bar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary-color: #28a745;
+      --pending-color: #ccc;
+      --empty-line-color: #eee;
+      --button-color: #6f42c1;
+      --bg-color: #f8f9fa;
+      --transition-duration: 0.3s;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+    }
+
+    .progress-container {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.5s ease;
+    }
+
+    .progress-step {
+      position: relative;
+      z-index: 1;
+    }
+
+    .progress-circle {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-width: 2px;
+    }
+
+    .progress-step.active .progress-circle {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 6px rgba(40, 167, 69, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    .progress-step.complete .progress-circle {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .progress-line {
+      position: absolute;
+      height: 4px;
+      top: 20px;
+      left: 0;
+      right: 0;
+      z-index: 0;
+      background-color: var(--empty-line-color);
+    }
+
+    .progress-line-fill {
+      height: 100%;
+      background-color: var(--primary-color);
+      width: 0%;
+      transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .checkmark {
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .progress-step.complete .checkmark {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .nav-button {
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .nav-button:not(:disabled):hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(111, 66, 193, 0.3);
+    }
+
+    .nav-button:not(:disabled):active {
+      transform: translateY(-1px);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .progress-step.active .progress-step-label {
+      animation: bounce 1s ease infinite;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    [dir="rtl"] .nav-button-prev svg {
+      transform: rotate(180deg);
+    }
+    
+    [dir="rtl"] .nav-button-next svg {
+      transform: rotate(180deg);
+    }
+
+    @media (max-width: 480px) {
+      .progress-circle {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .progress-step-label {
+        font-size: 10px;
+      }
+      
+      .progress-line {
+        top: 15px;
+      }
+      
+      .nav-buttons {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="progress-container bg-white rounded-lg p-8 w-full max-w-3xl">
+    <div class="relative mb-12">
+      <div class="progress-line">
+        <div class="progress-line-fill" id="progressLineFill"></div>
+      </div>
+      
+      <ul role="progressbar" 
+          aria-valuemin="1" 
+          aria-valuemax="5" 
+          aria-valuenow="1"
+          class="flex justify-between relative z-10" 
+          id="progressSteps">
+        <li class="progress-step complete active flex flex-col items-center">
+          <div class="progress-circle w-10 h-10 rounded-full border-2 flex items-center justify-center">
+            <svg class="checkmark w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="progress-step-label mt-2 text-xs">Start</span>
+        </li>
+        <li class="progress-step pending flex flex-col items-center">
+          <div class="progress-circle w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
+            <svg class="checkmark w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="progress-step-label mt-2 text-xs">Step 1</span>
+        </li>
+        <li class="progress-step pending flex flex-col items-center">
+          <div class="progress-circle w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
+            <svg class="checkmark w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="progress-step-label mt-2 text-xs">Step 2</span>
+        </li>
+        <li class="progress-step pending flex flex-col items-center">
+          <div class="progress-circle w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
+            <svg class="checkmark w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="progress-step-label mt-2 text-xs">Step 3</span>
+        </li>
+        <li class="progress-step pending flex flex-col items-center">
+          <div class="progress-circle w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
+            <svg class="checkmark w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="progress-step-label mt-2 text-xs">Step 4</span>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="nav-buttons flex justify-between gap-4 sm:gap-0">
+      <button 
+        id="prevButton" 
+        class="nav-button nav-button-prev w-[50px] h-[50px] bg-purple-700 text-white rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" 
+        aria-label="Go to previous step" 
+        disabled>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      
+      <button 
+        id="nextButton" 
+        class="nav-button nav-button-next w-[50px] h-[50px] bg-purple-700 text-white rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" 
+        aria-label="Go to next step">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const progressSteps = document.querySelectorAll('.progress-step');
+      const progressBar = document.getElementById('progressSteps');
+      const progressLineFill = document.getElementById('progressLineFill');
+      const prevButton = document.getElementById('prevButton');
+      const nextButton = document.getElementById('nextButton');
+      
+      let currentStep = 1;
+      const totalSteps = progressSteps.length;
+      
+      updateUI();
+      
+      prevButton.addEventListener('click', handlePrevious);
+      nextButton.addEventListener('click', handleNext);
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') {
+          handlePrevious();
+        } else if (e.key === 'ArrowRight') {
+          handleNext();
+        }
+      });
+      
+      function handleNext() {
+        if (currentStep < totalSteps) {
+          progressSteps[currentStep - 1].classList.add('transitioning');
+          
+          currentStep++;
+          
+          setTimeout(() => {
+            updateUI();
+            progressSteps[currentStep - 1].classList.remove('transitioning');
+          }, 50);
+        }
+      }
+      
+      function handlePrevious() {
+        if (currentStep > 1) {
+          progressSteps[currentStep - 1].classList.add('transitioning');
+          
+          currentStep--;
+          
+          setTimeout(() => {
+            updateUI();
+            progressSteps[currentStep - 1].classList.remove('transitioning');
+          }, 50);
+        }
+      }
+      
+      function updateUI() {
+        progressSteps.forEach((step, i) => {
+          if (i < currentStep) {
+            step.classList.add('complete');
+            step.classList.remove('pending');
+          } else {
+            step.classList.remove('complete');
+            step.classList.add('pending');
+          }
+        });
+        
+        progressSteps.forEach(step => step.classList.remove('active'));
+        progressSteps[currentStep - 1].classList.add('active');
+        
+        setTimeout(() => {
+          const fillPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+          progressLineFill.style.width = `${fillPercentage}%`;
+        }, 10);
+        
+        prevButton.disabled = currentStep === 1;
+        nextButton.disabled = currentStep === totalSteps;
+        
+        progressBar.setAttribute('aria-valuenow', currentStep);
+        
+        const container = document.querySelector('.progress-container');
+        container.style.transform = 'scale(1.01)';
+        setTimeout(() => {
+          container.style.transform = 'scale(1)';
+        }, 200);
+      }
+    });
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'954bcadf47477a0a',t:'MTc1MDc2MzU3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
