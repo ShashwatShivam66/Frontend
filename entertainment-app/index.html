@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entertainment Hub - Movies, TV Shows & More</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Loading Screen -->
+        <div class="loading-screen">
+            <div class="loader">
+                <div class="loader-circle"></div>
+                <div class="loader-circle"></div>
+                <div class="loader-circle"></div>
+            </div>
+            <h2 class="loading-text">Loading Entertainment Hub...</h2>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <i class="fas fa-film"></i>
+                    <span>EntHub</span>
+                </div>
+                
+                <div class="nav-search">
+                    <input type="text" id="searchInput" placeholder="Search for movies or TV series..." class="search-input">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <div class="nav-menu">
+                    <a href="#home" class="nav-link active" data-page="home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#movies" class="nav-link" data-page="movies">
+                        <i class="fas fa-film"></i>
+                        <span>Movies</span>
+                    </a>
+                    <a href="#tv-shows" class="nav-link" data-page="tv-shows">
+                        <i class="fas fa-tv"></i>
+                        <span>TV Shows</span>
+                    </a>
+                    <a href="#bookmarks" class="nav-link" data-page="bookmarks">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Bookmarks</span>
+                    </a>
+                </div>
+
+                <div class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Page -->
+            <section id="home" class="page active">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Welcome to Entertainment Hub</h1>
+                        <p class="hero-subtitle">Discover amazing movies and TV shows</p>
+                        <button class="hero-cta">Explore Now</button>
+                    </div>
+                    <div class="hero-bg">
+                        <div class="hero-gradient"></div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <section class="section">
+                        <h2 class="section-title">Trending Now</h2>
+                        <div class="content-grid" id="trending-grid"></div>
+                    </section>
+
+                    <section class="section">
+                        <h2 class="section-title">Recommended for You</h2>
+                        <div class="content-grid" id="recommended-grid"></div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- Movies Page -->
+            <section id="movies" class="page">
+                <div class="container">
+                    <div class="page-header">
+                        <h1 class="page-title">Movies</h1>
+                        <div class="filter-container">
+                            <select class="filter-select" id="movie-filter">
+                                <option value="all">All Genres</option>
+                                <option value="action">Action</option>
+                                <option value="drama">Drama</option>
+                                <option value="comedy">Comedy</option>
+                                <option value="thriller">Thriller</option>
+                                <option value="sci-fi">Sci-Fi</option>
+                                <option value="crime">Crime</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="animation">Animation</option>
+                                <option value="horror">Horror</option>
+                                <option value="western">Western</option>
+                            </select>
+                            <select class="filter-select" id="movie-sort">
+                                <option value="rating">Highest Rated</option>
+                                <option value="year-desc">Newest First</option>
+                                <option value="year-asc">Oldest First</option>
+                                <option value="title">Alphabetical</option>
+                            </select>
+                            <button class="filter-btn" id="movie-view-toggle">
+                                <i class="fas fa-th"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="content-grid" id="movies-grid"></div>
+                </div>
+            </section>
+
+            <!-- TV Shows Page -->
+            <section id="tv-shows" class="page">
+                <div class="container">
+                    <div class="page-header">
+                        <h1 class="page-title">TV Shows</h1>
+                        <div class="filter-container">
+                            <select class="filter-select" id="tv-filter">
+                                <option value="all">All Genres</option>
+                                <option value="drama">Drama</option>
+                                <option value="comedy">Comedy</option>
+                                <option value="crime">Crime</option>
+                                <option value="thriller">Thriller</option>
+                                <option value="sci-fi">Sci-Fi</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="documentary">Documentary</option>
+                                <option value="animation">Animation</option>
+                                <option value="action">Action</option>
+                                <option value="horror">Horror</option>
+                            </select>
+                            <select class="filter-select" id="tv-sort">
+                                <option value="rating">Highest Rated</option>
+                                <option value="year-desc">Newest First</option>
+                                <option value="year-asc">Oldest First</option>
+                                <option value="title">Alphabetical</option>
+                            </select>
+                            <button class="filter-btn" id="tv-view-toggle">
+                                <i class="fas fa-th"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="content-grid" id="tv-grid"></div>
+                </div>
+            </section>
+
+            <!-- Bookmarks Page -->
+            <section id="bookmarks" class="page">
+                <div class="container">
+                    <h1 class="page-title">My Bookmarks</h1>
+                    <div class="content-grid" id="bookmarks-grid"></div>
+                    <div class="empty-state" id="empty-bookmarks">
+                        <i class="fas fa-bookmark"></i>
+                        <h3>No Bookmarks Yet</h3>
+                        <p>Start bookmarking your favorite content!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Results -->
+            <section id="search-results" class="page">
+                <div class="container">
+                    <h1 class="page-title">Search Results</h1>
+                    <p class="search-query"></p>
+                    <div class="content-grid" id="search-grid"></div>
+                    <div class="empty-state" id="empty-search">
+                        <i class="fas fa-search"></i>
+                        <h3>No Results Found</h3>
+                        <p>Try searching with different keywords</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Content Modal -->
+        <div class="modal" id="contentModal">
+            <div class="modal-content">
+                <button class="modal-close">&times;</button>
+                <div class="modal-body">
+                    <img class="modal-image" src="" alt="">
+                    <div class="modal-info">
+                        <h2 class="modal-title"></h2>
+                        <div class="modal-meta">
+                            <span class="modal-year"></span>
+                            <span class="modal-category"></span>
+                            <span class="modal-rating"></span>
+                        </div>
+                        <p class="modal-description"></p>
+                        <div class="modal-actions">
+                            <button class="btn-primary play-btn">
+                                <i class="fas fa-play"></i> Play Now
+                            </button>
+                            <button class="btn-secondary bookmark-btn">
+                                <i class="fas fa-bookmark"></i> Bookmark
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <div class="mobile-menu-overlay"></div>
+            <div class="mobile-menu-content">
+                <button class="mobile-menu-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <a href="#home" class="mobile-nav-link" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#movies" class="mobile-nav-link" data-page="movies">
+                    <i class="fas fa-film"></i>
+                    <span>Movies</span>
+                </a>
+                <a href="#tv-shows" class="mobile-nav-link" data-page="tv-shows">
+                    <i class="fas fa-tv"></i>
+                    <span>TV Shows</span>
+                </a>
+                <a href="#bookmarks" class="mobile-nav-link" data-page="bookmarks">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Bookmarks</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
