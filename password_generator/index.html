@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Password Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #3A0CA3;
+            --primary-light: #4361EE;
+            --accent: #4CC9F0;
+            --bg-dark: #160C28;
+            --bg-darker: #000000;
+            --text-light: #FFFFFF;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .glass-panel {
+            background: rgba(58, 12, 163, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .password-display {
+            position: relative;
+            margin-bottom: 2rem;
+            border-radius: var(--border-radius);
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(76, 201, 240, 0.3);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.2);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .password-display:hover {
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.3);
+        }
+
+        .password-text {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 24px;
+            letter-spacing: 1px;
+            word-break: break-all;
+            text-align: center;
+            min-height: 36px;
+            color: var(--text-light);
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .password-text.masked span {
+            filter: blur(4px);
+        }
+
+        .password-text.empty::before {
+            content: '••••••••';
+            color: var(--text-dim);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .password-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn-icon {
+            background: rgba(67, 97, 238, 0.2);
+            border: none;
+            color: var(--text-light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-icon:hover {
+            background: rgba(76, 201, 240, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
+        }
+
+        .btn-icon:active {
+            transform: translateY(0);
+        }
+
+        .btn-icon svg {
+            width: 20px;
+            height: 20px;
+            transition: var(--transition);
+        }
+
+        .btn-icon .success-icon {
+            position: absolute;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .btn-icon.success .default-icon {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .btn-icon.success .success-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .btn-icon.spin svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .controls-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .length-control {
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-container {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            position: relative;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent);
+            transition: var(--transition);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent);
+            border: none;
+            transition: var(--transition);
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .slider-value {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-dark);
+            color: var(--text-light);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            border: 1px solid var(--accent);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-tile {
+            background: rgba(58, 12, 163, 0.2);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option-tile.active {
+            background: rgba(76, 201, 240, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(76, 201, 240, 0.2);
+        }
+
+        .option-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(67, 97, 238, 0.3);
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .option-tile.active .option-icon {
+            background: var(--accent);
+        }
+
+        .option-text {
+            font-weight: 500;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .toggle-label {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .strength-meter {
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .strength-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .strength-text {
+            font-weight: 600;
+        }
+
+        .strength-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .strength-segment {
+            height: 100%;
+            width: 25%;
+            transition: transform 0.5s ease;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        .strength-segment:nth-child(1) { background-color: #FF4D4D; }
+        .strength-segment:nth-child(2) { background-color: #FFA64D; }
+        .strength-segment:nth-child(3) { background-color: #4DFF77; }
+        .strength-segment:nth-child(4) { background-color: var(--accent); }
+
+        .btn-generate {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(76, 201, 240, 0.4);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .btn-generate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-generate:hover::before {
+            opacity: 1;
+        }
+
+        .btn-generate.loading .btn-text {
+            opacity: 0;
+        }
+
+        .btn-generate .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-generate.loading .loader {
+            opacity: 1;
+        }
+
+        .btn-generate.error {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translateX(-1px); }
+            20%, 80% { transform: translateX(2px); }
+            30%, 50%, 70% { transform: translateX(-4px); }
+            40%, 60% { transform: translateX(4px); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(76, 201, 240, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .history-section {
+            margin-top: 1.5rem;
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .history-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .history-icon {
+            transition: var(--transition);
+        }
+
+        .history-header.open .history-icon {
+            transform: rotate(90deg);
+        }
+
+        .history-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .history-content.open {
+            max-height: 300px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.05);
+            margin-top: 0.5rem;
+        }
+
+        .history-password {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: var(--accent);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-30px) translateX(15px);
+            }
+            50% {
+                transform: translateY(-15px) translateX(-15px);
+            }
+            75% {
+                transform: translateY(30px) translateX(10px);
+            }
+        }
+
+        .shimmer {
+            animation: shimmer 2s ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% {
+                text-shadow: 0 0 0 rgba(76, 201, 240, 0);
+            }
+            50% {
+                text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 0 rgba(76, 201, 240, 0);
+            }
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            background: linear-gradient(135deg, #E6F7FF, #FFFFFF);
+            color: #333;
+        }
+
+        body.light-theme .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        body.light-theme .password-display {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(76, 201, 240, 0.5);
+        }
+
+        body.light-theme .password-text {
+            color: #333;
+        }
+
+        body.light-theme .btn-icon {
+            background: rgba(76, 201, 240, 0.2);
+            color: #333;
+        }
+
+        body.light-theme .option-tile {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        body.light-theme .option-tile.active {
+            background: rgba(76, 201, 240, 0.2);
+        }
+
+        body.light-theme .toggle-slider {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .section-title {
+            color: var(--primary-dark);
+        }
+
+        body.light-theme .toggle-label {
+            color: #555;
+        }
+
+        body.light-theme .history-item {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .history-password {
+            color: #555;
+        }
+
+        body.light-theme .theme-toggle {
+            color: #333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .password-text {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <button class="theme-toggle" id="themeToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+        <span>Light Mode</span>
+    </button>
+
+    <div class="container">
+        <h1>Secure Password Generator</h1>
+        
+        <div class="glass-panel">
+            <div class="password-display">
+                <div class="password-text empty" id="passwordDisplay"></div>
+                <div class="password-actions">
+                    <button class="btn-icon" id="toggleVisibility" title="Toggle Visibility">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                    <button class="btn-icon" id="refreshPassword" title="Generate New Password">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
+                    <button class="btn-icon" id="copyPassword" title="Copy to Clipboard">
+                        <svg class="default-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                        <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="length-control">
+                    <div class="section-title">Password Length</div>
+                    <div class="slider-container">
+                        <input type="range" min="6" max="32" value="12" class="slider" id="lengthSlider">
+                        <div class="slider-value" id="lengthValue">12 chars</div>
+                    </div>
+                </div>
+
+                <div class="section-title">Character Types</div>
+                <div class="options-grid">
+                    <div class="option-tile active" data-option="uppercase">
+                        <div class="option-icon">A</div>
+                        <div class="option-text">Uppercase</div>
+                    </div>
+                    <div class="option-tile active" data-option="lowercase">
+                        <div class="option-icon">a</div>
+                        <div class="option-text">Lowercase</div>
+                    </div>
+                    <div class="option-tile active" data-option="numbers">
+                        <div class="option-icon">#</div>
+                        <div class="option-text">Numbers</div>
+                    </div>
+                    <div class="option-tile active" data-option="symbols">
+                        <div class="option-icon">&</div>
+                        <div class="option-text">Symbols</div>
+                    </div>
+                </div>
+
+                <div class="section-title">Advanced Options</div>
+                <div class="toggle-row">
+                    <span class="toggle-label">Exclude similar characters (1, l, I, 0, O)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="excludeSimilar">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row">
+                    <span class="toggle-label">Avoid ambiguous symbols ({}, &lt;>, [], etc)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="avoidAmbiguous">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="strength-meter">
+                    <div class="strength-label">
+                        <span>Password Strength</span>
+                        <span class="strength-text" id="strengthText">Medium</span>
+                    </div>
+                    <div class="strength-bar">
+                        <div class="strength-segment"></div>
+                        <div class="strength-segment"></div>
+                        <div class="strength-segment"></div>
+                        <div class="strength-segment"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-generate" id="generateBtn">
+                <span class="btn-text">Generate Password</span>
+                <div class="loader"></div>
+            </button>
+
+            <div class="history-section">
+                <div class="history-header" id="historyHeader">
+                    <svg class="history-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                    <span>Password History</span>
+                </div>
+                <div class="history-content" id="historyContent">
+                    <!-- Password history items will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+
+    <script>
+        // DOM Elements
+        const passwordDisplay = document.getElementById('passwordDisplay');
+        const lengthSlider = document.getElementById('lengthSlider');
+        const lengthValue = document.getElementById('lengthValue');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyPassword = document.getElementById('copyPassword');
+        const refreshPassword = document.getElementById('refreshPassword');
+        const toggleVisibility = document.getElementById('toggleVisibility');
+        const optionTiles = document.querySelectorAll('.option-tile');
+        const excludeSimilar = document.getElementById('excludeSimilar');
+        const avoidAmbiguous = document.getElementById('avoidAmbiguous');
+        const strengthText = document.getElementById('strengthText');
+        const strengthSegments = document.querySelectorAll('.strength-segment');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const historyHeader = document.getElementById('historyHeader');
+        const historyContent = document.getElementById('historyContent');
+        const themeToggle = document.getElementById('themeToggle');
+        const particles = document.getElementById('particles');
+
+        // State
+        let currentPassword = '';
+        let passwordHistory = [];
+        let isPasswordVisible = true;
+
+        // Character sets
+        const charSets = {
+            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            lowercase: 'abcdefghijklmnopqrstuvwxyz',
+            numbers: '0123456789',
+            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        const similarChars = '1lI0O';
+        const ambiguousSymbols = '{}[]()<>`~';
+
+        // Initialize particles
+        function createParticles() {
+            particles.innerHTML = '';
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 5px and 15px
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particles.appendChild(particle);
+            }
+        }
+
+        // Update slider value display
+        function updateSliderValue() {
+            const value = lengthSlider.value;
+            lengthValue.textContent = `${value} chars`;
+            
+            // Position the value bubble
+            const percent = (value - lengthSlider.min) / (lengthSlider.max - lengthSlider.min);
+            const bubblePosition = percent * (lengthSlider.offsetWidth - 20);
+            lengthValue.style.left = `calc(${bubblePosition}px)`;
+            
+            updateStrengthMeter();
+        }
+
+        // Generate password based on selected options
+        function generatePassword() {
+            // Check if at least one option is selected
+            const activeOptions = document.querySelectorAll('.option-tile.active');
+            if (activeOptions.length === 0) {
+                generateBtn.classList.add('error');
+                setTimeout(() => {
+                    generateBtn.classList.remove('error');
+                }, 500);
+                return;
+            }
+
+            // Show loading state
+            generateBtn.classList.add('loading');
+            
+            // Simulate loading for better UX
+            setTimeout(() => {
+                const length = parseInt(lengthSlider.value);
+                let chars = '';
+                
+                // Add selected character sets
+                activeOptions.forEach(option => {
+                    const type = option.dataset.option;
+                    chars += charSets[type];
+                });
+                
+                // Apply exclusions
+                if (excludeSimilar.checked) {
+                    chars = chars.split('').filter(char => !similarChars.includes(char)).join('');
+                }
+                
+                if (avoidAmbiguous.checked && chars.includes(charSets.symbols)) {
+                    chars = chars.split('').filter(char => !ambiguousSymbols.includes(char)).join('');
+                }
+                
+                // Generate the password
+                let password = '';
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * chars.length);
+                    password += chars[randomIndex];
+                }
+                
+                // Update the display
+                currentPassword = password;
+                displayPassword();
+                
+                // Add to history (max 3 items)
+                addToHistory(password);
+                
+                // Update strength meter
+                updateStrengthMeter();
+                
+                // Remove loading state
+                generateBtn.classList.remove('loading');
+                
+                // Add shimmer effect
+                passwordDisplay.classList.add('shimmer');
+                setTimeout(() => {
+                    passwordDisplay.classList.remove('shimmer');
+                }, 2000);
+                
+            }, 500);
+        }
+
+        // Display the current password
+        function displayPassword() {
+            if (currentPassword) {
+                passwordDisplay.classList.remove('empty');
+                
+                // Create spans for each character for better masking control
+                passwordDisplay.innerHTML = '';
+                for (let char of currentPassword) {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    passwordDisplay.appendChild(span);
+                }
+                
+                if (!isPasswordVisible) {
+                    passwordDisplay.classList.add('masked');
+                } else {
+                    passwordDisplay.classList.remove('masked');
+                }
+            } else {
+                passwordDisplay.classList.add('empty');
+                passwordDisplay.innerHTML = '';
+            }
+        }
+
+        // Copy password to clipboard
+        function copyToClipboard() {
+            if (!currentPassword) return;
+            
+            navigator.clipboard.writeText(currentPassword).then(() => {
+                // Show success state
+                copyPassword.classList.add('success');
+                
+                // Show toast notification
+                toastMessage.textContent = "Copied to clipboard!";
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    copyPassword.classList.remove('success');
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // Add password to history
+        function addToHistory(password) {
+            // Add to the beginning of the array
+            passwordHistory.unshift(password);
+            
+            // Keep only the last 3 passwords
+            if (passwordHistory.length > 3) {
+                passwordHistory.pop();
+            }
+            
+            // Update the history display
+            updateHistoryDisplay();
+        }
+
+        // Update the history display
+        function updateHistoryDisplay() {
+            historyContent.innerHTML = '';
+            
+            passwordHistory.forEach(password => {
+                const item = document.createElement('div');
+                item.classList.add('history-item');
+                
+                const passwordText = document.createElement('div');
+                passwordText.classList.add('history-password');
+                passwordText.textContent = password;
+                
+                const copyBtn = document.createElement('button');
+                copyBtn.classList.add('btn-icon');
+                copyBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                `;
+                
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(password).then(() => {
+                        toastMessage.textContent = "Copied to clipboard!";
+                        toast.classList.add('show');
+                        setTimeout(() => {
+                            toast.classList.remove('show');
+                        }, 2000);
+                    });
+                });
+                
+                item.appendChild(passwordText);
+                item.appendChild(copyBtn);
+                historyContent.appendChild(item);
+            });
+        }
+
+        // Update the strength meter
+        function updateStrengthMeter() {
+            // Calculate password strength score (0-4)
+            let score = 0;
+            const length = parseInt(lengthSlider.value);
+            const activeOptions = document.querySelectorAll('.option-tile.active');
+            const optionCount = activeOptions.length;
+            
+            // Factor 1: Length
+            if (length >= 8) score += 1;
+            if (length >= 16) score += 1;
+            if (length >= 24) score += 1;
+            
+            // Factor 2: Character variety
+            if (optionCount >= 2) score += 1;
+            if (optionCount >= 3) score += 1;
+            if (optionCount >= 4) score += 1;
+            
+            // Factor 3: Advanced options
+            if (excludeSimilar.checked || avoidAmbiguous.checked) score += 1;
+            
+            // Normalize score to 0-4 range
+            score = Math.min(Math.floor(score / 2), 4);
+            
+            // Update strength text
+            const strengthLabels = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Fort Knox!'];
+            strengthText.textContent = strengthLabels[score];
+            
+            // Update strength bar - fill segments based on score
+            strengthSegments.forEach((segment, index) => {
+                if (index < score) {
+                    segment.style.transform = 'scaleX(1)';
+                } else {
+                    segment.style.transform = 'scaleX(0)';
+                }
+            });
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            isPasswordVisible = !isPasswordVisible;
+            displayPassword();
+            
+            // Update icon
+            if (isPasswordVisible) {
+                toggleVisibility.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                `;
+            } else {
+                toggleVisibility.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                `;
+            }
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            const body = document.body;
+            const isDarkTheme = !body.classList.contains('light-theme');
+            
+            if (isDarkTheme) {
+                body.classList.add('light-theme');
+                themeToggle.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span>Dark Mode</span>
+                `;
+            } else {
+                body.classList.remove('light-theme');
+                themeToggle.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <span>Light Mode</span>
+                `;
+            }
+        }
+
+        // Toggle history section
+        function toggleHistory() {
+            historyHeader.classList.toggle('open');
+            historyContent.classList.toggle('open');
+        }
+
+        // Event Listeners
+        lengthSlider.addEventListener('input', updateSliderValue);
+        generateBtn.addEventListener('click', generatePassword);
+        copyPassword.addEventListener('click', copyToClipboard);
+        refreshPassword.addEventListener('click', generatePassword);
+        toggleVisibility.addEventListener('click', togglePasswordVisibility);
+        themeToggle.addEventListener('click', toggleTheme);
+        historyHeader.addEventListener('click', toggleHistory);
+
+        // Option tile click handler
+        optionTiles.forEach(tile => {
+            tile.addEventListener('click', () => {
+                tile.classList.toggle('active');
+                updateStrengthMeter();
+            });
+        });
+
+        // Advanced options change handler
+        excludeSimilar.addEventListener('change', updateStrengthMeter);
+        avoidAmbiguous.addEventListener('change', updateStrengthMeter);
+
+        // Initialize
+        createParticles();
+        updateSliderValue();
+        generatePassword();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95094f0b125a8f92',t:'MTc1MDA2NjQzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
