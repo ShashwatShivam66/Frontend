@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Quiz App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#1e1e2f] text-white min-h-screen flex items-center justify-center p-4">
+  <div class="container max-w-5xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16 items-center md:items-start">
+    <div class="md:w-1/2 space-y-4 md:pt-16" id="left-panel">
+      <h1 class="text-2xl md:text-4xl font-normal">
+        Welcome to the 
+        <span class="block font-bold text-3xl md:text-5xl mt-1">Frontend Quiz!</span>
+      </h1>
+      <p class="text-gray-400 text-sm md:text-base">Pick a subject to get started.</p>
+    </div>
+    <div class="md:w-1/2 space-y-8 w-full max-w-md">
+      <div class="flex justify-end items-center">
+        <div class="flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-300">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <div class="toggle-switch w-12 h-6 bg-purple-600 rounded-full p-1 cursor-pointer">
+            <div class="toggle-circle w-4 h-4 bg-white rounded-full"></div>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-200">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="space-y-4" id="main-menu">
+        <button class="quiz-button bg-[#2e2e4d] hover:bg-[#3e3e6d] w-full p-4 rounded-xl flex items-center gap-4" data-quiz="html">
+          <div class="bg-white w-12 h-12 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 40 40">
+              <path fill="#FF7E35" d="M24.508 7.607a1.25 1.25 0 0 1 .634 1.65l-10 22.5a1.25 1.25 0 1 1-2.284-1.015l10-22.5a1.251 1.251 0 0 1 1.65-.635ZM10.832 13.44a1.249 1.249 0 0 1 .1 1.765L6.674 20l4.263 4.795a1.25 1.25 0 1 1-1.87 1.66l-5-5.625a1.25 1.25 0 0 1 0-1.66l5-5.625a1.25 1.25 0 0 1 1.764-.105Zm18.337 0a1.25 1.25 0 0 1 1.765.105l5 5.625a1.25 1.25 0 0 1 0 1.66l-5 5.625a1.25 1.25 0 1 1-1.87-1.66L33.327 20l-4.262-4.795a1.25 1.25 0 0 1 .105-1.765Z"/>
+            </svg>
+          </div>
+          <span class="font-medium">HTML</span>
+        </button>
+
+        <button class="quiz-button bg-[#2e2e4d] hover:bg-[#3e3e6d] w-full p-4 rounded-xl flex items-center gap-4" data-quiz="css">
+          <div class="bg-white w-12 h-12 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 40 40">
+              <path fill="#2FD887" d="M10 2.505a1.25 1.25 0 0 0-1.25 1.25V21.25a5 5 0 0 0 5 5H15v6.25a4.999 4.999 0 0 0 9.615 1.913c.25-.607.38-1.257.38-1.913v-6.25h1.255a5 5 0 0 0 5-5V3.755A1.25 1.25 0 0 0 30 2.505H10ZM28.75 17.5h-17.5V5.005h7.5V8.76a1.25 1.25 0 0 0 2.5 0V5.005h2.5v6.24a1.25 1.25 0 0 0 2.5 0v-6.24h2.5V17.5Zm-17.5 3.75V20h17.5v1.25a2.5 2.5 0 0 1-2.5 2.5h-2.505a1.25 1.25 0 0 0-1.25 1.25v7.5a2.497 2.497 0 1 1-4.995 0V25a1.25 1.25 0 0 0-1.25-1.25h-2.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+            </svg>
+          </div>
+          <span class="font-medium">CSS</span>
+        </button>
+
+        <button class="quiz-button bg-[#2e2e4d] hover:bg-[#3e3e6d] w-full p-4 rounded-xl flex items-center gap-4" data-quiz="javascript">
+          <div class="bg-white w-12 h-12 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 40 40">
+              <path fill="#306AFF" d="M21.25 18.75A3.75 3.75 0 0 1 25 15h3.75a1.25 1.25 0 0 1 0 2.5H25a1.25 1.25 0 0 0-1.25 1.25V20A1.25 1.25 0 0 0 25 21.25h1.25A3.75 3.75 0 0 1 30 25v1.25A3.75 3.75 0 0 1 26.25 30H22.5a1.25 1.25 0 0 1 0-2.5h3.75a1.25 1.25 0 0 0 1.25-1.25V25a1.25 1.25 0 0 0-1.25-1.25H25A3.75 3.75 0 0 1 21.25 20v-1.25ZM20 16.25a1.25 1.25 0 0 0-2.5 0v10a1.25 1.25 0 0 1-1.25 1.25h-2.5a1.25 1.25 0 0 0 0 2.5h2.5A3.75 3.75 0 0 0 20 26.25v-10Zm-15-5A6.25 6.25 0 0 1 11.25 5h17.5A6.25 6.25 0 0 1 35 11.25v17.5A6.25 6.25 0 0 1 28.75 35h-17.5A6.25 6.25 0 0 1 5 28.75v-17.5Zm6.25-3.75a3.75 3.75 0 0 0-3.75 3.75v17.5a3.75 3.75 0 0 0 3.75 3.75h17.5a3.75 3.75 0 0 0 3.75-3.75v-17.5a3.75 3.75 0 0 0-3.75-3.75h-17.5Z"/>
+            </svg>
+          </div>
+          <span class="font-medium">JavaScript</span>
+        </button>
+
+        <button class="quiz-button bg-[#2e2e4d] hover:bg-[#3e3e6d] w-full p-4 rounded-xl flex items-center gap-4" data-quiz="accessibility">
+          <div class="bg-white w-12 h-12 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 40 40">
+              <path fill="#A729F5" d="M16.875 8.125a3.125 3.125 0 1 1 6.25 0 3.125 3.125 0 0 1-6.25 0ZM20 2.5a5.625 5.625 0 0 0-5.475 6.915l-4.03-1.625a4 4 0 0 0-5.19 2.18 3.95 3.95 0 0 0 2.175 5.175l5.02 2.027v5.96l-4.532 8.525a3.98 3.98 0 0 0 7.024 3.738L20 25.975l5.01 9.42a3.978 3.978 0 0 0 7.025-3.735L27.5 23.13v-5.957l5.02-2.028a3.95 3.95 0 0 0 2.175-5.175 4 4 0 0 0-5.19-2.183l-4.027 1.628A5.626 5.626 0 0 0 20 2.5ZM7.618 10.922a1.5 1.5 0 0 1 1.94-.817l8.57 3.463a5 5 0 0 0 3.744 0l8.57-3.463a1.5 1.5 0 0 1 1.94.817 1.45 1.45 0 0 1-.8 1.905l-5.02 2.025A2.5 2.5 0 0 0 25 17.175v5.957c0 .41.1.814.293 1.175l4.535 8.528a1.48 1.48 0 0 1-2.61 1.39l-5.01-9.425a2.5 2.5 0 0 0-4.415 0l-5.008 9.418a1.477 1.477 0 1 1-2.61-1.388l4.532-8.525A2.5 2.5 0 0 0 15 23.133v-5.96a2.5 2.5 0 0 0-1.563-2.318l-5.02-2.03a1.45 1.45 0 0 1-.8-1.902Z"/>
+            </svg>
+          </div>
+          <span class="font-medium">Accessibility</span>
+        </button>
+      </div>
+
+      <div id="quiz-area" class="hidden">
+        <div class="mb-6">
+          <div class="flex justify-between text-sm mb-1">
+            <span id="question-counter">Question 1/10</span>
+            <span id="question-status">Not answered</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 10%"></div>
+          </div>
+        </div>
+
+        <div id="question-container" class="mb-6">
+          <h2 id="question-text" class="text-xl font-bold mb-4">Question text goes here</h2>
+          <div id="options-container" class="space-y-3">
+          </div>
+        </div>
+
+        <div class="flex gap-3 mb-3">
+          <button id="prev-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl flex-1">Previous</button>
+          <button id="next-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl flex-1">Next</button>
+        </div>
+        <div class="space-y-3">
+          <button id="submit-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl w-full hidden">Submit Quiz</button>
+          <button id="back-to-menu" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl w-full">Back to Menu</button>
+        </div>
+      </div>
+
+      <div id="results-container" class="hidden text-center py-8">
+        <h2 class="text-2xl font-bold mb-4">Quiz Completed!</h2>
+        <div class="mb-6">
+          <div class="text-6xl font-bold text-purple-500 mb-2" id="final-score">0/10</div>
+          <p class="text-lg">Your final score</p>
+        </div>
+        <div id="question-review" class="text-left mb-6 space-y-4 max-h-60 overflow-y-auto">
+        </div>
+        <button id="play-again" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl mb-3 w-full">Play Again</button>
+        <button id="return-to-menu" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl w-full">Back to Menu</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
